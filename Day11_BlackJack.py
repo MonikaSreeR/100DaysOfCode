@@ -8,6 +8,115 @@ logo = """
       |  \/ K|                            _/ |                
       `------'                           |__/           
 """
+import random
+from replit import clear
+
+cards_list=[2,3,4,5,6,7,8,9,'J','Q','K','A']
+cards_dict={'J':10,'Q':10,'K':10,'A':11}
+
+def pick_card():
+  return random.choice(cards_list)
+def score(cards):
+  score=0
+  if len(cards)==2 and (cards ==['A',10] or cards==[10,'A']):
+    return 0
+  for card in cards:
+    if card not in cards_dict:
+      score+=card
+    elif card in cards_dict:
+      score+=cards_dict[card]
+  if score>21 and 'A' in cards:
+    score-=10
+  return score
+
+def compare(user_score,dealer_score):
+  if user_score > 21 and dealer_score > 21:
+    print("You went over. You lose")
+  elif user_score==0:
+    print("You win with a Blackjack!")
+  elif dealer_score==0:
+    print("Dealer wins with a Blackjack!")
+  elif user_score>21:
+    print("You went over. You lose!")
+  elif dealer_score>21:
+    print("Dealer went over. You win!")
+  elif user_score==dealer_score:
+    print("It's a draw!")
+  elif user_score>dealer_score:
+    print("You win the game!")
+  elif user_score<dealer_score:
+    print("You lose the game!")
+  play_new_game=input("Do you want to play a new game? Type 'y' or 'n': ").lower()
+  return play_new_game
+
+print(logo)
+play_new_game= input("Do you want to play Black Jack game? Type 'y' or 'n': ").lower()
+while play_new_game=='y':
+  clear()
+  print(logo)
+  user_cards=[pick_card(),pick_card()]
+  dealer_cards=[pick_card()]
+  user_score = score(user_cards)
+  dealer_score = score(dealer_cards)
+  print(f"Your cards: {user_cards}, current score: {user_score}")
+  print(f"Computer's first card: {dealer_cards}")
+  if score(user_cards)==0:
+    compare(user_score,dealer_score)
+  else:
+    another_card=input("Type 'y' to get another card, type 'n' to pass: ").lower()
+    while another_card=='y':
+      user_cards.append(pick_card())
+      user_score=score(user_cards)
+      print(f"Your cards: {user_cards}, current score: {user_score}")
+      another_card=input("Type 'y' to get another card, type 'n' to pass: ").lower()    
+    print(f"Your final hand: {user_cards}, final score: {user_score}")
+    
+    if another_card=='n':
+      while dealer_score<17:
+        dealer_cards.append(pick_card())
+        dealer_score=score(dealer_cards)
+    print(f"Dealer's final hand: {dealer_cards}, final score: {dealer_score}")
+    play_new_game=compare(user_score,dealer_score)
+      
+      
+      
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ############### Blackjack Project #####################
 
@@ -70,102 +179,11 @@ logo = """
 
 #Hint 14: Ask the user if they want to restart the game. If they answer yes, clear the console and start a new game of blackjack and show the logo from art.py.
 
-import random
-from art import logo
-from replit import clear
-
-def cards_sum(cards,total):
-  sum=0
-  if 'A' in cards:
-    cards.remove('A')
-    cards.append('A')
-  for card in cards:
-    if card=='J' or card=='Q' or card=='K':
-      card=10
-    elif card=='A' and total<=11:
-      card=11
-    elif card=='A' and total>11:
-      card=1
-    else:
-      card=card
-    sum+=card
-    total=sum
-  return sum
-
-def total_without_A(cards):
-  sum=0
-  A_presence='False'
-  if 'A' in cards:
-    cards.remove('A')
-    A_presence='True'
-  for card in cards:
-    if card=='J' or card=='Q' or card=='K':
-      card=10
-    sum+=card
-  if sum>=21 and A_presence:
-    return "False" 
-  else:
-    return "True" 
-  
-  
-def check_next_game():
-  next_game=input("Would you like to play again y or n?")
-  if next_game=='y':
-    continue_nextgame= "True"
-  else:
-    continue_nextgame= "False"
-
-def presence_of_A(cards):
-  if 'A' in cards:
-    return True
-  else:
-    return False
-
-def check_user_total_is_21(user_total):
-  if user_total==21:
-    game_over=1
-    print(f"YOU WIN as your cards are {user_cards} and score is 21 ")
-    check_next_game()
-    
-      
-continue_nextgame='True'
-while continue_nextgame=='True':
-  game_over=0
-  clear()
-  print(logo)
-  cards_list=[2,3,4,5,6,7,8,9,10,'J','Q','K','A']
-  dealer_cards=[random.choice(cards_list)]
-  user_cards=[random.choice(cards_list),random.choice(cards_list)]
-  user_total=0
-  dealer_total=0  
-    
-  user_total = cards_sum(user_cards,user_total)
-  dealer_total = cards_sum(dealer_cards,dealer_total)
-  check_user_total_is_21(user_total)
-  
-  if game_over==0:
-    while user_total<17 or (user_total>=17 and  user_total<=28 and presence_of_A(user_cards)):
-      print(f"your cards are {user_cards} and the sum is {user_total}")
-      print(f"dealer's first card is {dealer_cards[0]}")
-      next_chance=input("would you like to hit another card y or n?")
-      if next_chance=='y':
-        user_cards.append(random.choice(cards_list))
-        user_total=cards_sum(user_cards,user_total)
-        check_user_total_is_21(user_total)
-    if user_total>21:    
-      print(f"YOU LOSE, your cards are {user_cards} and total is {user_total} and over 21")
-      game_over=1
-      
-    while dealer_total<17  or (user_total>=17 and  user_total<=28 and presence_of_A(dealer_cards)):
-      dealer_cards.append(random.choice(cards_list))
-      dealer_total=cards_sum(dealer_cards,dealer_total)
-
-    if game_over==0:
-      if user_total==dealer_total:
-        print(f"IT'S A DRAW, your cards are {user_cards} and total is {user_total} and the dealer's cards are {dealer_cards} and total is {dealer_total}")
-      elif user_total>dealer_total or dealer_total>21:
-        print(f"YOU WIN, your cards are {user_cards} and total is {user_total} and the dealer's cards are {dealer_cards} and total is {dealer_total}")
-      else:
-        print(f"YOU LOSE, your cards are {user_cards} and total is {user_total} and the dealer's cards are {dealer_cards} and total is {dealer_total}")
-            
-      check_next_game()
+#create cards list
+#Pick 1 dealer card
+#Pick 2 player cards
+#Calculate player score
+#Calculate dealer score
+#If sum<21, ask player if they want another card
+#If sum>21, check if ace is present, if yes, change
+#Once player stop picking cards, dealer picks cards until sum>17
