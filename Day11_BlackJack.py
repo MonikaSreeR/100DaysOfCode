@@ -59,7 +59,7 @@ while play_new_game=='y':
   user_score = score(user_cards)
   dealer_score = score(dealer_cards)
   print(f"Your cards: {user_cards}, current score: {user_score}")
-  print(f"Computer's first card: {dealer_cards}")
+  print(f"Dealer's first card: {dealer_cards}")
   if score(user_cards)==0:
     compare(user_score,dealer_score)
   else:
