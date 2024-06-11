@@ -14,7 +14,7 @@ tim.forward(250)
 tim.right(90)
 tim.forward(200)
 tim.left(180)
-for ii in range(1,101):
+for ii in range(1,101): #number of dots =100
   tim.dot(20,random.choice(colors))
   tim.forward(50)
   if ii%10==0:
